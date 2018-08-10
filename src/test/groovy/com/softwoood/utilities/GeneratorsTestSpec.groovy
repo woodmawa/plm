@@ -7,12 +7,12 @@ class GeneratorsTestSpec extends Specification {
 
     def "Return default generator" () {
         when: "get basic generator "
-        SequenceGenerator s = SequenceGenerator.basic
+        SequenceGenerator s = SequenceGenerator.standard
 
         then : "confirm expected result "
-        s.name == "basic"
+        s.name == "standard"
         s.sequence.get() == 1
         SequenceGenerator.generators.size() == 1
-        SequenceGenerator.generators.get ("basic") is s
+        SequenceGenerator.generators.get ("standard") is (s)
     }
 }

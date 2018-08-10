@@ -6,7 +6,7 @@ import groovy.transform.MapConstructor
 import java.util.concurrent.ConcurrentLinkedQueue
 
 
-@MapConstructor (post = {id = SequenceGenerator.next() })
+@MapConstructor (post = {id = SequenceGenerator.standard.next() })
 
 class ProductHierarchy {
     long id
