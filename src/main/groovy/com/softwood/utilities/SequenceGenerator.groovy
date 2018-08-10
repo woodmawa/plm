@@ -39,7 +39,7 @@ class SequenceGenerator {
     private SequenceGenerator  (String name, Long init = null) {
         assert name
         this.name = name
-        if (!init) {
+        if (init != null) {
             sequence.set (init.toLong())     //if non null start value
         }
     }
