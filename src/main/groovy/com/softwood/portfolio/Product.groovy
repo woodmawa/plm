@@ -1,12 +1,14 @@
 package com.softwood.portfolio
 
 import com.softwood.utilities.SequenceGenerator
+import groovy.transform.Canonical
 import groovy.transform.MapConstructor
 
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @MapConstructor (post = {id = SequenceGenerator.standard.next() }
 )
+@Canonical(includePackage=false, ignoreNulls=true, includeNames=true,includeFields=true,excludes="description")
 class Product {
     long id
     String code
@@ -38,5 +40,9 @@ class Product {
     void removeProductCapability (ProductCapability pc) {
         assert pc
         productCapability.remove()
+    }
+
+    String toString() {
+        "Product > id:$id, name:$name, class: ${productClass.toString()}"
     }
 }

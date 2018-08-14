@@ -6,6 +6,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.concurrent.ConcurrentLinkedQueue
 
+
 class Application {
 
     static appBinding = new Binding()
@@ -16,8 +17,7 @@ class Application {
 
         //global variables from binding now visible
         appBinding.with {
-            println ">> $newA.name"
-            println ">> " + runScriptOrder.toString()
+            println ">> $vfProductsMaster"
         }
 
     }

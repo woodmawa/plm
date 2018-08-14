@@ -64,6 +64,7 @@ dir.eachFileRecurse (FileType.FILES) { file ->
 def runInSequence = runScriptOrder.sort {a,b ->
     a[0] <=> b[0]}
 
+//run in sequence order synchronously at the mo
 runInSequence.each {
     evaluate(it[1])
 }
