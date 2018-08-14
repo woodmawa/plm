@@ -25,4 +25,8 @@ class ProductLine {
         assert p
         products.remove(p)
     }
+
+    String toString() {
+        "ProductLine (name:$productLineName, brand: $brand)"
+    }
 }

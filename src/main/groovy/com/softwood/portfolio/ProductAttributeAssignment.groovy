@@ -11,7 +11,7 @@ class MissingParameterException extends RuntimeException {
 
 /**
  * This class is used to configure which attribute groups, and which singleton attributes
- * are linked to a product record in the portfolio
+ * are linked to productAttributesAndAssignment product record in the portfolio
  *
  */
 class ProductAttributeAssignment {

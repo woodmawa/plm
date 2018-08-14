@@ -40,7 +40,7 @@ dir.eachFileRecurse (FileType.FILES) { file ->
                     \\s+                # some whitespace
                     =                   # assignment 
                     \\s+                # some whitespace
-                    (d+)                # some digits in group to make a number
+                    (d+)                # some digits in group to make productAttributesAndAssignment number
                      """*/
             pat = ~/^\s*+def\s*runConfigInOrder\s*=\s*(\d+)/
             def m = (it =~ pat)

@@ -25,6 +25,10 @@ class Application {
             println ">> ${vfPortfolio.productUses.list()} "
             println ">> ${vfPortfolio.productMaster.list()} "
             println ">> ${vfPortfolio.productHierarchies.list()} "
+            println ">> ${vfPortfolio.productLines.list()} "
+            def iPhoneMap = vfPortfolio.productAttributeMappings.find {it.product.name == "iPhone"}
+            assert iPhoneMap
+            println iPhoneMap.toString()
         }
 
 
