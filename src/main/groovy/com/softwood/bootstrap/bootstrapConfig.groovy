@@ -64,7 +64,12 @@ dir.eachFileRecurse (FileType.FILES) { file ->
 def runInSequence = runScriptOrder.sort {a,b ->
     a[0] <=> b[0]}
 
+//add container for all the portfolio list entities for reuse
+binding.vfPortfolio = new Expando ()
+
+
 //run in sequence order synchronously at the mo
+//expact the conf files to add to vfPortfolio expando
 runInSequence.each {
     evaluate(it[1])
 }

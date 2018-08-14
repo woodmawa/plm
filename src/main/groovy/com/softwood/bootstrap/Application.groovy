@@ -17,7 +17,7 @@ class Application {
 
         //global variables from binding now visible
         appBinding.with {
-            println ">> $vfProductsMaster"
+            println ">> $vfPortfolio.productsMaster"
         }
 
     }
