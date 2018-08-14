@@ -7,6 +7,9 @@ class Application {
 
     static Binding appBinding = new Binding()
 
+    static Closure pre
+    static Closure post
+
     /**
      * main programme entry point with main method
      * @param args
@@ -18,7 +21,10 @@ class Application {
     def run (args) {
         //global variables from binding now visible
         appBinding.with {
-            println ">> ${vfPortfolio.productsMaster}"
+            //println ">> ${vfPortfolio.productMaster}"
+            println ">> ${vfPortfolio.productUses.list()} "
+            println ">> ${vfPortfolio.productMaster.list()} "
+            println ">> ${vfPortfolio.productHierarchies.list()} "
         }
 
 
@@ -28,9 +34,15 @@ class Application {
      * static initialiser block to ensure that binding and bootstrap are executed
      */
     static {
+        if (pre)
+            pre()
+
         //run initial config
         $ApplicationInit.setupBinding (appBinding)
         $ApplicationInit.executeBootstrapConfig(appBinding)
+
+        if (post)
+            post ()
     }
 
 

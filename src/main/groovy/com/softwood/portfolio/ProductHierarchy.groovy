@@ -2,13 +2,13 @@ package com.softwood.portfolio
 
 
 import com.softwood.utilities.SequenceGenerator
+import groovy.transform.Canonical
 import groovy.transform.MapConstructor
 
 import java.util.concurrent.ConcurrentLinkedQueue
 
 
 @MapConstructor (post = {id = SequenceGenerator.standard.next() })
-
 class ProductHierarchy {
     long id
     String name
@@ -19,7 +19,7 @@ class ProductHierarchy {
 
     void setParent (ProductHierarchy parent) {
         this.parent = parent
-        level = parent.level++
+        level = this.level++
     }
 
     void addChild (ProductHierarchy child) {
@@ -59,5 +59,9 @@ class ProductHierarchy {
 
     void clearProducts () {
         hierarchyProducts.clear()
+    }
+
+    String toString () {
+        "Hierarchy (name:${getCrumbPath()}, level: $level"
     }
 }
