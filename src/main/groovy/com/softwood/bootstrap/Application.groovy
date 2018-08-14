@@ -1,51 +1,37 @@
 package com.softwood.bootstrap
 
-import groovy.transform.SourceURI
+import com.softwood.bootstrap.applicationHelper.*
 
-import java.nio.file.Path
-import java.nio.file.Paths
-import java.util.concurrent.ConcurrentLinkedQueue
-
-
+@Singleton
 class Application {
 
-    static appBinding = new Binding()
+    static Binding appBinding = new Binding()
 
+    /**
+     * main programme entry point with main method
+     * @param args
+     */
     static main (args) {
-        setupBinding ()
-        executeBootstrapConfig()
+        Application.instance.run()
+}
 
+    def run (args) {
         //global variables from binding now visible
         appBinding.with {
-            println ">> $vfPortfolio.productsMaster"
+            println ">> ${vfPortfolio.productsMaster}"
         }
+
 
     }
 
-    //Helper methods - establishes some initial variables on an Expando
-    static setupBinding () {
-        appBinding.with {
-            $runScriptOrder = new ConcurrentLinkedQueue<>()
-            //add container for all the portfolio list entities for reuse
-            //todo not sure if Expand is thread safe may need synchronistaion add method to protect
-            vfPortfolio = new Expando()
-        }
+    /**
+     * static initialiser block to ensure that binding and bootstrap are executed
+     */
+    static {
+        //run initial config
+        $ApplicationInit.setupBinding (appBinding)
+        $ApplicationInit.executeBootstrapConfig(appBinding)
     }
 
-    //Helper methods
-    static executeBootstrapConfig () {
 
-        @SourceURI URI sourceUri
-        Path scriptLocation = Paths.get(sourceUri).parent
-
-        def bootstrap = new File ("$scriptLocation/bootstrapConfig.groovy")
-
-        def cfn = bootstrap.canonicalPath
-
-        if (bootstrap.exists() && bootstrap.canExecute()) {
-            GroovyShell shell = new GroovyShell(appBinding)
-            shell.evaluate (bootstrap)      //run the bootstrap.groovy
-        }
-
-    }
 }

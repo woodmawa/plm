@@ -1,11 +1,7 @@
 package com.softwood.portfolio
 
-import com.softwood.utilities.SequenceGenerator
-import com.softwood.utilities.Version
-import groovy.transform.MapConstructor
 
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentLinkedQueue
 
 class ProductRelationship {
     String relationshipType

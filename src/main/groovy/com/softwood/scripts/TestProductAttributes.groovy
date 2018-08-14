@@ -1,7 +1,12 @@
 package com.softwood.scripts
 
-import com.softwood.portfolio.*
-
+import com.softwood.portfolio.AttributeGroup
+import com.softwood.portfolio.AttributeValueListItem
+import com.softwood.portfolio.NamedListOfValues
+import com.softwood.portfolio.Product
+import com.softwood.portfolio.ProductAttribute
+import com.softwood.portfolio.ProductAttributeAssignment
+import com.softwood.portfolio.ProductClass
 
 //setup a product
 ProductClass pclass = new ProductClass (productClass: "node", productType: "Phone")

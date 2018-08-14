@@ -1,10 +1,8 @@
 package com.softwood.portfolio
 
 import groovy.transform.InheritConstructors
-import org.apache.groovy.util.concurrentlinkedhashmap.ConcurrentLinkedHashMap
 
 import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.ConcurrentMap
 
 @InheritConstructors
 class MissingParameterException extends RuntimeException {

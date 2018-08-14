@@ -17,9 +17,6 @@ package com.softwood.bootstrap
 
 import groovy.io.FileType
 
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-
 def list = []
 
 // get list of *.conf files in run sorted order and run each one
@@ -66,6 +63,7 @@ def runInSequence = $runScriptOrder.sort {a,b ->
 
 //run in sequence order synchronously at the mo
 //expact the conf files to add to vfPortfolio expando
+println " bootstrap : run configs in order "
 runInSequence.each {
     evaluate(it[1])
 }
