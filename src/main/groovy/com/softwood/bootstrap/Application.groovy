@@ -22,10 +22,17 @@ class Application {
 
     }
 
+    //Helper methods - establishes some initial variables on an Expando
     static setupBinding () {
-        appBinding.runScriptOrder = new ConcurrentLinkedQueue<>()
+        appBinding.with {
+            $runScriptOrder = new ConcurrentLinkedQueue<>()
+            //add container for all the portfolio list entities for reuse
+            //todo not sure if Expand is thread safe may need synchronistaion add method to protect
+            vfPortfolio = new Expando()
+        }
     }
 
+    //Helper methods
     static executeBootstrapConfig () {
 
         @SourceURI URI sourceUri
@@ -35,8 +42,7 @@ class Application {
 
         def cfn = bootstrap.canonicalPath
 
-        def ready = bootstrap.exists() //&& bootstrap.canExecute())
-        if (ready) {
+        if (bootstrap.exists() && bootstrap.canExecute()) {
             GroovyShell shell = new GroovyShell(appBinding)
             shell.evaluate (bootstrap)      //run the bootstrap.groovy
         }

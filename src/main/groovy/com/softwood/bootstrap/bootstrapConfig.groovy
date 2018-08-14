@@ -55,18 +55,14 @@ dir.eachFileRecurse (FileType.FILES) { file ->
         if (line) {
             runOrderText = line.substring (line.lastIndexOf("=") + 1)
             runScriptOrder = runOrderText.toInteger()
-            binding.runScriptOrder << [runScriptOrder, file]
+            binding.$runScriptOrder << [runScriptOrder, file]
         }
     }
 }
 
 
-def runInSequence = runScriptOrder.sort {a,b ->
+def runInSequence = $runScriptOrder.sort {a,b ->
     a[0] <=> b[0]}
-
-//add container for all the portfolio list entities for reuse
-binding.vfPortfolio = new Expando ()
-
 
 //run in sequence order synchronously at the mo
 //expact the conf files to add to vfPortfolio expando
