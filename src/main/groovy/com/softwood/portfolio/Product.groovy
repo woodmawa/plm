@@ -25,10 +25,11 @@ class Product {
     ProductAttributeAssignment attributeAssignment
 
 
-    //owning end is with ProductLine
+    //owning end is expected to be with ProductLine
     void addProductLine (ProductLine pl) {
         assert pl
-        productLines << pl
+        if (!productLines.contains(pl))  //only add if not present
+            productLines << pl
     }
 
     void removeProductLine (ProductLine pl) {
@@ -37,7 +38,9 @@ class Product {
 
     void addProductCapability (ProductCapability pc) {
         assert pc
-        productCapability << pl
+
+        if (!productCapability.contains(pc))  //only add if not present
+            productCapability << pc
     }
 
     void removeProductCapability (ProductCapability pc) {
