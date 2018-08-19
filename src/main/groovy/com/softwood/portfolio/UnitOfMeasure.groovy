@@ -6,14 +6,10 @@ import groovy.transform.MapConstructor
 
 import java.util.concurrent.ConcurrentLinkedQueue
 
-
-@MapConstructor (post = {id = SequenceGenerator.standard.next() }
-)
-@Canonical(includePackage=false, ignoreNulls=true, includeNames=true,includeFields=true,excludes="description")
-
+//todo maybe better as enumeration
 
 class UnitOfMeasure {
-    static ConcurrentLinkedQueue UoMList
+    static ConcurrentLinkedQueue UoMList = new ConcurrentLinkedQueue(["Each", "Per Month", "Days", "Months", "Years", "Hours", "Minutes", "Seconds" ])
 
     String uom
 
@@ -24,5 +20,45 @@ class UnitOfMeasure {
 
     static list () {
         UoMList.toArray()
+    }
+
+    static getAt (index) {
+        def value = null
+        if (index in 0..(UoMList.size() -1))
+            value = UoMList[index]
+        else if (index instanceof String) {
+            Closure matchClosure = {it.toUpperCase().contains(index.toUpperCase())}
+            def position = UoMList.findIndexOf (matchClosure)
+            if (position != -1)
+                value = UoMList[position]
+        }
+        value
+    }
+
+     static def propertyMissing (receiver, String propName) {
+        println "prop $propName, saught"
+    }
+
+
+    //expects either a String or your own closure, with String will do case insensitive find
+    static find (match) {
+        Closure matchClosure
+        if (match instanceof Closure)
+            matchClosure = match
+        if (match instanceof String) {
+            matchClosure = {it.toUpperCase().contains(match.toUpperCase())}
+        }
+        def inlist = UoMList.find (matchClosure)
+    }
+
+    static findWithIndex (match) {
+        Closure matchClosure
+        if (match instanceof Closure)
+            matchClosure = match
+        else if (match instanceof String) {
+            matchClosure = {it.toUpperCase().contains(match.toUpperCase())}
+        }
+        def position = UoMList.findIndexOf (matchClosure)
+        position != -1  ? [UoMList[position], position] : ["Not In List", -1]
     }
 }
