@@ -9,4 +9,4 @@ println "$uom at postition $position"
 
 // works UnitOfMeasure.metaClass.static.propertyMissing = {name -> println "accessed prop called $name"}
 println UnitOfMeasure[4]
-println UnitOfMeasure.'Per'
+println UnitOfMeasure.'Eac'

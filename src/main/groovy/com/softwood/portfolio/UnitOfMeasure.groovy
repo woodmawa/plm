@@ -35,8 +35,15 @@ class UnitOfMeasure {
         value
     }
 
-     static def propertyMissing (receiver, String propName) {
-        println "prop $propName, saught"
+
+    //MOP intercept property access on class for class properties, when property doesn't exist
+    static def $static_propertyMissing(String propName)  {
+
+        def position = UoMList.findIndexOf {it.toUpperCase().contains (propName.toUpperCase()) }
+        if (position != -1)
+            UoMList[position]
+        else
+            null
     }
 
 
