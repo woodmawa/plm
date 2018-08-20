@@ -1,6 +1,6 @@
 package com.softwood.scripts
 
-import com.softwood.portfolio.ProductHierarchy
+import com.softwood.domain.portfolio.ProductHierarchy
 
 def root = new ProductHierarchy(name: "level1", level: 1)
 

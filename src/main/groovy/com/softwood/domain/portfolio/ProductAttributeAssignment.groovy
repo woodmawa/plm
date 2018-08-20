@@ -1,4 +1,4 @@
-package com.softwood.portfolio
+package com.softwood.domain.portfolio
 
 import groovy.transform.InheritConstructors
 

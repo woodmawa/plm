@@ -1,6 +1,6 @@
 package com.softwood.scripts
 
-import com.softwood.portfolio.UnitOfMeasure
+import com.softwood.domain.portfolio.UnitOfMeasure
 
 println UnitOfMeasure.list()
 
