@@ -13,7 +13,7 @@ class CompositeProduct extends Product {
         composedOfProducts << product  //can be another composite or base product
     }
 
-    
+
     void removeProductFromComposite (product) {
         composedOfProducts.removeAll {it.product == product}
     }

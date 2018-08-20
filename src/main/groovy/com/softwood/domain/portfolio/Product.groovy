@@ -19,7 +19,7 @@ class Product {
     String previousName
     String description
     String status       //make enum eventually
-    Version version = new Version()
+    Version version = new Version(0,1,0)
 
     //relationships - many2many relationships between products and ProductLines
     ProductClass productClass

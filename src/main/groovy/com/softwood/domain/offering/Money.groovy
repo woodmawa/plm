@@ -15,8 +15,8 @@ class CurrencyCalculator {
 
 @InheritConstructors
 class InvalidCurrencyException extends RuntimeException {
-    InvalidCurrencyException newInstance(message) {
-        super newInstance(message)
+    InvalidCurrencyException (String message) {
+        super (message)
     }
 }
 
@@ -29,7 +29,7 @@ class Money {
 
     Money add (Money money) {
         if (this.currency != money.currency)
-            throw new InvalidCurrencyException().newInstance("both Money instances must have the same currency")
+            throw new InvalidCurrencyException("both Money instances must have the same currency")
 
         new Money (amount + money.amount, this.currency)
     }
