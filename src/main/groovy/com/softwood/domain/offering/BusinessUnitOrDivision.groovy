@@ -7,8 +7,9 @@ import groovy.transform.MapConstructor
 class BusinessUnitOrDivision {
     long id
     String name
+    String opCoCode
 
     String toString () {
-        "offering business unit : $name"
+        "BusUnit (unit : $name, opcode: $opCoCode)"
     }
 }
