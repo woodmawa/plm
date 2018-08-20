@@ -3,6 +3,7 @@ package com.softwood.domain.offering
 import com.softwood.domain.portfolio.Product
 import com.softwood.domain.portfolio.Region
 import com.softwood.utilities.SequenceGenerator
+import com.softwood.utilities.Version
 import groovy.transform.MapConstructor
 
 import java.time.LocalDate
@@ -19,7 +20,7 @@ class ProductOffering {
     LocalDate toDate
     String status
     Boolean isDiscountable
-    long version
+    Version version
 
     ConcurrentLinkedQueue<ProductOfferingBundle> offerBundle
 
@@ -37,5 +38,9 @@ class ProductOffering {
 
     void setRegion (region) {
         offerRegion = region
+    }
+
+    Boolean isBundle () {
+        offerBundle ? true : false
     }
 }
