@@ -1,27 +1,26 @@
-package com.softwood.domain.portfolio
+package com.softwood.domain.offering
 
-
+import com.softwood.domain.portfolio.Product
 import com.softwood.utilities.SequenceGenerator
 import groovy.transform.MapConstructor
 
 import java.util.concurrent.ConcurrentLinkedQueue
 
-
 @MapConstructor (post = {id = SequenceGenerator.standard.next() })
-class ProductHierarchy {
+abstract class CatalogueHierarchy {
     long id
     String name
     long level
-    ConcurrentLinkedQueue<Product> hierarchyProducts = new ConcurrentLinkedQueue()
-    ProductHierarchy parent
-    ConcurrentLinkedQueue<ProductHierarchy> childLevels = new ConcurrentLinkedQueue<>()
+    ConcurrentLinkedQueue<Product> hierarchyOfferings = new ConcurrentLinkedQueue()
+    CatalogueHierarchy parent
+    ConcurrentLinkedQueue<CatalogueHierarchy> childLevels = new ConcurrentLinkedQueue<>()
 
-    void setParent (ProductHierarchy parent) {
+    void setParent (CatalogueHierarchy parent) {
         this.parent = parent
         level = this.level++
     }
 
-    void addChild (ProductHierarchy child) {
+    void addChild (CatalogueHierarchy child) {
         childLevels << child
         if (!child.parent)
             child.setParent (this)
@@ -38,7 +37,7 @@ class ProductHierarchy {
 
     //todo - this is not complete/ needs recursive handling etc etc
     //warning destructive on this and all sub levels
-    void deleteLevel (ProductHierarchy thisLevel) {
+    void deleteLevel (CatalogueHierarchy thisLevel) {
         def parent  = thisLevel.parent
         if (parent) {
             parent.childLevels.remove (thisLevel)
@@ -48,19 +47,28 @@ class ProductHierarchy {
     }
 
 
-    void addProduct (Product product) {
-        hierarchyProducts << product
+    void addProductOffering (ProductOffering offering) {
+        hierarchyOfferings << offering
     }
 
-    void removeProduct (Product product) {
-        hierarchyProducts.remove(product)
+    void removeProductOffering (ProductOffering offering) {
+        hierarchyOfferings.remove(offering)
     }
 
-    void clearProducts () {
-        hierarchyProducts.clear()
+    void clearProductOfferings() {
+        hierarchyOfferings.clear()
     }
 
     String toString () {
-        "Hierarchy (name:${getCrumbPath()}, level: $level)"
+        "${this.getClass().simpleName} (name:${getCrumbPath()}, level: $level)"
     }
+}
+
+//two concrete catalogues one for sales and one for service
+class SalesCatalogue extends CatalogueHierarchy {
+
+}
+
+class ServiceCatalogue extends CatalogueHierarchy {
+
 }
