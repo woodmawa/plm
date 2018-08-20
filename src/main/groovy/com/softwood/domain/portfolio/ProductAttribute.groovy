@@ -4,8 +4,11 @@ import com.softwood.utilities.SequenceGenerator
 import com.softwood.utilities.Version
 import groovy.transform.MapConstructor
 
-@MapConstructor (post = {id = SequenceGenerator.standard.next() })
 
+/**
+ * polymorphic parent - can have subclasses such as CommercialAttribute
+ */
+@MapConstructor (post = {id = SequenceGenerator.standard.next() })
 class ProductAttribute {
     long id
     String name

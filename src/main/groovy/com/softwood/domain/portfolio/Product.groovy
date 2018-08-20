@@ -2,6 +2,7 @@ package com.softwood.domain.portfolio
 
 
 import com.softwood.utilities.SequenceGenerator
+import com.softwood.utilities.Version
 import groovy.transform.Canonical
 import groovy.transform.MapConstructor
 
@@ -15,14 +16,20 @@ class Product {
     String code
     String SKU
     String name
+    String previousName
     String description
     String status       //make enum eventually
+    Version version = new Version()
 
     //relationships - many2many relationships between products and ProductLines
     ProductClass productClass
     ConcurrentLinkedQueue productLines = new ConcurrentLinkedQueue()
     ConcurrentLinkedQueue productCapability = new ConcurrentLinkedQueue()
+    ConcurrentLinkedQueue productVariants = new ConcurrentLinkedQueue()
+    ConcurrentLinkedQueue productOptions = new ConcurrentLinkedQueue()
+
     ProductAttributeAssignment attributeAssignment
+
 
 
     //owning end is expected to be with ProductLine
@@ -48,6 +55,30 @@ class Product {
         productCapability.remove()
     }
 
+    //product variants  are sub products in there own right (extend product) and get there own SKU
+    void addProductVariant (varient) {
+        if (!productVariants.contains(varient))
+            productVariants << varient
+    }
+
+    void removeProductVariant (varient) {
+        productVariants.remove (varient)
+    }
+
+    //product options are not products themselves and have same SKU as owning base product
+    void addProductOption (option) {
+        if (!productOptions.contains(option))
+            productOptions << option
+    }
+
+    void removeProductOption (option) {
+        productOptions.remove (option)
+    }
+
+    Boolean isVariant () {
+        this instanceof ProductVariant ? true : false
+    }
+
     //sort of optional - you can always do query on assigments for matched product
     //but this permits optimised read of attribute assignments for this product directly
     //from the product itself - use groovy setter/getter for now
@@ -61,6 +92,6 @@ class Product {
     }
 
     String toString() {
-        "Product > id:$id, name:$name, class: ${productClass.toString()}"
+        "Product > id:$id, name:$name, class: ${productClass.toString()}, variant: ${isVariant()}"
     }
 }
