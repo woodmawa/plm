@@ -12,7 +12,8 @@ import java.util.concurrent.ConcurrentLinkedQueue
 @MapConstructor (post = {id = SequenceGenerator.standard.next() } )
 class ProductOffering {
 
-    @Delegate Product productOnOffer
+    @Delegate Product productOnOffer    //use if offering is for one product
+    String packageName      // only set if has productOffering Bundles
     BusinessUnitOrDivision offeringOrgUnit
     SalesChannel sellingChannel
     Region offerRegion
@@ -20,9 +21,11 @@ class ProductOffering {
     LocalDate toDate
     String status
     Boolean isDiscountable
+    Boolean isPackage   //set true if package, along with packageName
     Version version
 
     ConcurrentLinkedQueue<ProductOfferingBundle> offerBundle
+    OfferingAttributeAssignment offeringAttributeAssignment
 
     void setOfferedProduct (Product product) {
         productOnOffer = product
@@ -42,5 +45,9 @@ class ProductOffering {
 
     Boolean isBundle () {
         offerBundle ? true : false
+    }
+
+    Boolean isPackage () {
+        isPackage
     }
 }

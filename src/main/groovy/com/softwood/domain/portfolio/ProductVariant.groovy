@@ -7,7 +7,7 @@ class ProductVariant extends Product {
     //String vSKU
     //String variantName
     Product baseProduct
-    
+
 
     void setBaseProduct (product) {
         baseProduct = product

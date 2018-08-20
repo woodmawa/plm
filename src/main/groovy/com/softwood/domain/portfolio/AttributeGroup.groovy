@@ -12,6 +12,7 @@ class AttributeGroup {
     long id
     String groupName
     ConcurrentLinkedQueue<Tuple2> groupAttributesList = new ConcurrentLinkedQueue<ProductAttribute>()
+    Boolean mandatory
 
     void add (ProductAttribute pa, LoV = null) {
         groupAttributesList << new Tuple2 (pa, LoV)
@@ -24,5 +25,9 @@ class AttributeGroup {
 
     def getGroupAttributes () {
         groupAttributesList.toArray()
+    }
+
+    Boolean isMandatroy () {
+        mandatory
     }
 }
