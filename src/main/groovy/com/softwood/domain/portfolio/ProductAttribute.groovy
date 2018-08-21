@@ -20,7 +20,7 @@ class ProductAttribute {
     boolean isPriceEffecting
     boolean hasLoV
     boolean isMultivalued
-    boolean isVisible
+    boolean isVisible = true
     boolean isMandatory
     boolean isReadOnly
     Version version

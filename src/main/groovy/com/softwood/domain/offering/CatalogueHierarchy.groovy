@@ -2,6 +2,7 @@ package com.softwood.domain.offering
 
 import com.softwood.domain.portfolio.Product
 import com.softwood.utilities.SequenceGenerator
+import groovy.transform.InheritConstructors
 import groovy.transform.MapConstructor
 
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -11,7 +12,8 @@ abstract class CatalogueHierarchy {
     long id
     String name
     long level
-    ConcurrentLinkedQueue<Product> hierarchyOfferings = new ConcurrentLinkedQueue()
+
+    ConcurrentLinkedQueue<ProductOffering> hierarchyOfferings = new ConcurrentLinkedQueue()
     CatalogueHierarchy parent
     ConcurrentLinkedQueue<CatalogueHierarchy> childLevels = new ConcurrentLinkedQueue<>()
 
@@ -48,7 +50,8 @@ abstract class CatalogueHierarchy {
 
 
     void addProductOffering (ProductOffering offering) {
-        hierarchyOfferings << offering
+        if (!hierarchyOfferings.contains (offering))
+            hierarchyOfferings << offering
     }
 
     void removeProductOffering (ProductOffering offering) {
@@ -65,10 +68,12 @@ abstract class CatalogueHierarchy {
 }
 
 //two concrete catalogues one for sales and one for service
+@InheritConstructors
 class SalesCatalogue extends CatalogueHierarchy {
 
 }
 
+//@MapConstructor (post = {id = SequenceGenerator.standard.next() })
 class ServiceCatalogue extends CatalogueHierarchy {
 
 }

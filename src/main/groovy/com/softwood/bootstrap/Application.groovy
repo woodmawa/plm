@@ -27,12 +27,13 @@ class Application {
             println ">> ${vfPortfolio.productsMaster.list()} "
             println ">> ${vfPortfolio.productHierarchies.list()} "
             println ">> ${vfPortfolio.productLines.list()} "
+            println ">> ${vfPortfolio.salesCataloguesMaster.list()} "
             def iPhoneMap = vfPortfolio.productAttributeMappings.find {it.product.name == "iPhone"}
             assert iPhoneMap
             println iPhoneMap.toString()
 
             def offerings = vfPortfolio.offeredProductsMaster
-            assert vfPortfolio.offeredProductsMaster.size() == 3
+            assert vfPortfolio.offeredProductsMaster.size() > 1
 
             ProductOffering myOffer = offerings[0]
             println "\n myoffer : " + myOffer + ", with commercial attributes "

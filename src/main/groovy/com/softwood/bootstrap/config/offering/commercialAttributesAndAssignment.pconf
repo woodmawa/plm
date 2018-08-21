@@ -18,8 +18,6 @@ def runConfigInOrder = 2
 
 Binding scriptBinding = getBinding()
 
-def p = scriptBinding.vfPortfolio
-println "vfPortfolio is of class : " + p.getClass()
 
 //vfPortolfio is an expando, add offeredProductsMaster as new head
 vfPortfolio.offeredProductsMaster = new ConcurrentLinkedQueue<ProductOffering>()
@@ -194,5 +192,5 @@ ProductOffering iPhoneOffering = new ProductOffering (name:'iPhone')
 iPhoneOffering.setProductOnOffer(iPhone)
 offerings << iPhoneOffering
 
-println "done comm offerings "
+
 

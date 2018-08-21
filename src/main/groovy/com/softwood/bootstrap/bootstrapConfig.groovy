@@ -65,6 +65,8 @@ def runInSequence = $runScriptOrder.sort {a,b ->
 //expact the conf files to add to vfPortfolio expando
 println " bootstrap : run configs in order "
 runInSequence.each {
+
+    println " --- running : ${it[1].name} [runOrder : ${it[0]}]..."
     evaluate(it[1])
 }
 

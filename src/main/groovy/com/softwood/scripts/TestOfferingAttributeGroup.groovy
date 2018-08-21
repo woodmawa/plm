@@ -3,10 +3,12 @@ package com.softwood.scripts
 import com.softwood.domain.offering.OfferingAttributeGroup
 import com.softwood.domain.portfolio.AttributeGroup
 import com.softwood.utilities.SequenceGenerator
+import groovy.transform.InheritConstructors
 import groovy.transform.MapConstructor
 
-@MapConstructor
+
 class A {
+    long id
     String name
 
     Boolean isDead
@@ -15,18 +17,19 @@ class A {
     A() {}
 
     String toString() {
-        "A ($name)"
+        "A ($name, id:$id)"
     }
 }
 
+//if dont inherit will fail
+@MapConstructor (post = {id = SequenceGenerator.standard.next() })
+@InheritConstructors
 class B extends A {
    String toString() {
        "B ($name)"
    }
 }
 
-def cAttList = ["hello", "world"]
-def res = cAttList.join ""
 
 def myA = new A(name:"will")
 println myA
@@ -37,6 +40,3 @@ println myB
 
 def agroup = new AttributeGroup(groupName:"mps", mandatory:true)
 
-def ogroup = new OfferingAttributeGroup(groupName:"mps", mandatory:true)
-
-println ogroup

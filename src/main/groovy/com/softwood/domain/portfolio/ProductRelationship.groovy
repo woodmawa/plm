@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 class ProductRelationship {
     String relationshipType
+    String name
     ConcurrentHashMap aEndRelationship = new ConcurrentHashMap()
     ConcurrentHashMap zEndRelationship = new ConcurrentHashMap()
     long version
