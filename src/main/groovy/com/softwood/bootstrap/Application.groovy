@@ -1,6 +1,7 @@
 package com.softwood.bootstrap
 
 import com.softwood.bootstrap.applicationHelper.*
+import com.softwood.domain.offering.ProductOffering
 
 @Singleton
 class Application {
@@ -29,6 +30,12 @@ class Application {
             def iPhoneMap = vfPortfolio.productAttributeMappings.find {it.product.name == "iPhone"}
             assert iPhoneMap
             println iPhoneMap.toString()
+
+            def offerings = vfPortfolio.offeredProductsMaster
+            ProductOffering myOffer = offerings[0]
+            println "\n myoffer : " + myOffer + ", with commercial attributes "
+            println myOffer.offeringAttributeAssignment
+
         }
 
 

@@ -15,11 +15,13 @@ class AttributeGroup {
     Boolean mandatory
 
     void add (ProductAttribute pa, LoV = null) {
+        pa.addAttributeGroup (this)
         groupAttributesList << new Tuple2 (pa, LoV)
     }
 
     void remove (ProductAttribute pa) {
         //check through all the tuples for matched productAttribute - if found remove
+        pa.removeAttributeGroup (this)
        groupAttributesList.removeAll {it.first == pa}
     }
 

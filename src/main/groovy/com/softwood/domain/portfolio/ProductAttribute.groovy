@@ -4,6 +4,8 @@ import com.softwood.utilities.SequenceGenerator
 import com.softwood.utilities.Version
 import groovy.transform.MapConstructor
 
+import java.util.concurrent.ConcurrentLinkedQueue
+
 
 /**
  * polymorphic parent - can have subclasses such as CommercialAttribute
@@ -25,7 +27,16 @@ class ProductAttribute {
 
 
     //relationships
-    AttributeGroup partOfAttributeGroups = []
+    ConcurrentLinkedQueue<AttributeGroup> partOfAttributeGroups = new ConcurrentLinkedQueue()
+
+    void addAttributeGroup (attributeGroup) {
+        if (!partOfAttributeGroups.contains(attributeGroup))
+            partOfAttributeGroups << attributeGroup
+    }
+
+    void removeAttributeGroup (attributeGroup) {
+        partOfAttributeGroups.remove(attributeGroup)
+    }
 
     String toString () {
         "${this.toClass().simpleName} ($name, display:$displayName, type:$dataType, LoV:$hasLoV "

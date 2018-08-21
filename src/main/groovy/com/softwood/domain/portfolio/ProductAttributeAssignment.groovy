@@ -75,9 +75,6 @@ class ProductAttributeAssignment {
                         buff << ", with " <<  it?.second?.toString()
                     buff
                 }.join("\n") }.join()
-        String attListing = """
-${singleAtts } 
-${groupAtts}
-"""
+        String attListing = "${singleAtts }${groupAtts}"
     }
 }

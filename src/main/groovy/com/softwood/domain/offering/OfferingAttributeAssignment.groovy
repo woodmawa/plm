@@ -1,7 +1,6 @@
 package com.softwood.domain.offering
 
-import com.softwood.domain.portfolio.AttributeGroup
-import com.softwood.domain.portfolio.ProductAttribute
+
 import groovy.transform.InheritConstructors
 
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -12,7 +11,7 @@ class MissingParameterException extends RuntimeException {
 }
 
 /**
- * This class is used to configure which commercial offering attribute groups, and which singleton comercial attributes
+ * This class is used to configure which commercial offering attribute groups, and which singleton commercial attributes
  * are linked to offeringAttributesAndAssignment  record for the offerings
  *
  */
@@ -21,7 +20,7 @@ class OfferingAttributeAssignment {
     ProductOffering productOffering
 
     // array of tuples  first item is attribute, second optional lov
-    ConcurrentLinkedQueue<Tuple2> offeringAttributeTuplesList = new ConcurrentLinkedQueue()  //todo sort out thread safety
+    ConcurrentLinkedQueue<Tuple2> commercialAttributeTuplesList = new ConcurrentLinkedQueue()  //todo sort out thread safety
     ConcurrentLinkedQueue<OfferingAttributeGroup> offeringAttributeGroupsList = new ConcurrentLinkedQueue()
 
     /*getProductAttributeList () {
@@ -33,7 +32,7 @@ class OfferingAttributeAssignment {
         if (cpa.hasLoV && LoV == null)
             throw MissingParameterException.newInstance("missing LoV attribute ")
 
-        offeringAttributeTuplesList <<  new Tuple2(cpa, LoV)
+        commercialAttributeTuplesList <<  new Tuple2(cpa, LoV)
 
     }
 
@@ -49,7 +48,7 @@ class OfferingAttributeAssignment {
                 offeringAttributeGroupsList.remove(paItem)
             }
         }
-        offeringAttributeTuplesList <<  new Tuple2(pa, LoV)
+        commercialAttributeTuplesList <<  new Tuple2(pa, LoV)
 
     }
 
@@ -59,7 +58,7 @@ class OfferingAttributeAssignment {
 
     String toString() {
 
-        def singleAtts = offeringAttributeTuplesList.collect {
+        def singleAtts = commercialAttributeTuplesList.collect {
             StringBuffer buff = new StringBuffer()
             buff << it.first.name
             buff << " : "
@@ -71,16 +70,13 @@ class OfferingAttributeAssignment {
         }.join("\n")
 
         def groupAtts = offeringAttributeGroupsList.collect {"Offering Attribute Group: " + it.groupName + ">\n" +
-                it.groupAttributesList.collect{
+                it.offeringGroupAttributesList.collect{
                     StringBuffer buff = new StringBuffer ()
                     buff << "\t" << it.first.name << " : " << it.first.dataType.name
                     if (it.first.hasLoV)
                         buff << ", with " <<  it?.second?.toString()
                     buff
                 }.join("\n") }.join()
-        String attListing = """
-${singleAtts } 
-${groupAtts}
-"""
+        String attListing = "${singleAtts }${groupAtts}"
     }
 }

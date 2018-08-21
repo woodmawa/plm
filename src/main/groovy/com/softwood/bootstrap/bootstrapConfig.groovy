@@ -28,7 +28,7 @@ dir.eachFileRecurse (FileType.FILES) { file ->
     def runOrderText
     def runScriptOrder
     String line
-    if (ext =~ /^conf$/ ) {
+    if (ext =~ /^pconf$/ ) {
         def lines = file.readLines()
         def result = lines.findResult {
              /*Pattern pat = ~"""
@@ -42,8 +42,8 @@ dir.eachFileRecurse (FileType.FILES) { file ->
                     \\s+                # some whitespace
                     (d+)                # some digits in group to make productAttributesAndAssignment number
                      """*/
-            pat = ~/^\s*+def\s*runConfigInOrder\s*=\s*(\d+)/
-            def m = (it =~ pat)
+            def pattern = ~/^\s*+def\s*runConfigInOrder\s*=\s*(\d+)/
+            def m = (it =~ pattern)
             if (m.matches()) { it}
         }
 

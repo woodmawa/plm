@@ -31,13 +31,13 @@ AttributeGroup attGroup = new AttributeGroup (groupName:"Dimensions")
 //set up some attributes for group
 
 def gattList = []
-ProductAttribute pAttrib = new ProductAttribute (dataType: String, name:"width", partOfAttributeGroups:attGroup)
+ProductAttribute pAttrib = new ProductAttribute (dataType: String, name:"width")
 attGroup.add (pAttrib); gattList << pAttrib
 
-pAttrib = new ProductAttribute (dataType: String, name:"depth", partOfAttributeGroups:attGroup)
+pAttrib = new ProductAttribute (dataType: String, name:"depth")
 attGroup.add (pAttrib);gattList << pAttrib
 
-pAttrib = new ProductAttribute (dataType: String, name:"height", partOfAttributeGroups:attGroup)
+pAttrib = new ProductAttribute (dataType: String, name:"height")
 attGroup.add (pAttrib); gattList << pAttrib
 
 //set up shape lov for one of attributes in dimensions group
@@ -45,7 +45,7 @@ NamedListOfValues shapeLov = new NamedListOfValues(lovName:"shape")
 shapeLov << new AttributeValueListItem (sequenceNumber:1, value:"square")
 shapeLov << new AttributeValueListItem (sequenceNumber:2, value:"rectangle", isDefaultValue:true)
 
-pAttrib = new ProductAttribute (dataType: String, name:"shape", partOfAttributeGroups:attGroup, hasLoV:true)
+pAttrib = new ProductAttribute (dataType: String, name:"shape", hasLoV:true)
 //add using optional named lov instance
 attGroup.add (pAttrib, shapeLov); gattList << pAttrib
 

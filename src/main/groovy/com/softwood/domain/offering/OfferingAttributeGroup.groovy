@@ -3,26 +3,37 @@ package com.softwood.domain.offering
 import com.softwood.domain.portfolio.AttributeGroup
 import com.softwood.domain.portfolio.ProductAttribute
 import com.softwood.utilities.SequenceGenerator
+import groovy.transform.InheritConstructors
 import groovy.transform.MapConstructor
 
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @MapConstructor (post = {id = SequenceGenerator.standard.next() })
-class OfferingAttributeGroup extends AttributeGroup {
-    /*long id
-    String groupName
-    ConcurrentLinkedQueue<Tuple2> groupAttributesList = new ConcurrentLinkedQueue<ProductAttribute>()
 
-    void add (ProductAttribute pa, LoV = null) {
-        groupAttributesList << new Tuple2 (pa, LoV)
-    }
+//inheritance doesnt work groovy 2.5.1
+class OfferingAttributeGroup /*extends AttributeGroup*/ {
 
-    void remove (ProductAttribute pa) {
-        //check through all the tuples for matched productAttribute - if found remove
-       groupAttributesList.removeAll {it.first == pa}
-    }
+        long id
+        String groupName
+        ConcurrentLinkedQueue<Tuple2> offeringGroupAttributesList = new ConcurrentLinkedQueue<ProductAttribute>()
+        Boolean mandatory
 
-    def getGroupAttributes () {
-        groupAttributesList.toArray()
-    }*/
+        void add (CommercialProductAttribute cpa, LoV = null) {
+            cpa?.addOfferingGroup(this)
+            offeringGroupAttributesList << new Tuple2 (cpa, LoV)
+        }
+
+        void remove (CommercialProductAttribute cpa) {
+            cpa?.removeofferingGroup(this)
+            //check through all the tuples for matched productAttribute - if found remove
+            offeringGroupAttributesList.removeAll {it.first == cpa}
+        }
+
+        def getGroupAttributes () {
+            offeringGroupAttributesList.toArray()
+        }
+
+        Boolean isMandatroy () {
+            mandatory
+        }
 }

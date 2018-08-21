@@ -14,13 +14,18 @@ import java.util.concurrent.ConcurrentLinkedQueue
 // any globally required value should be set to the binding
 // ensure that any dependant scripts run with higher order value than the script that
 // sets the required value in the binding.  Multiple non dependant scripts can run at same level
-def runConfigInOrder = 1
+def runConfigInOrder = 2
 
+Binding scriptBinding = getBinding()
+
+def p = scriptBinding.vfPortfolio
+println "vfPortfolio is of class : " + p.getClass()
+
+//vfPortolfio is an expando
 vfPortfolio.offeredProductsMaster = new ConcurrentLinkedQueue<ProductOffering>()
-ConcurrentLinkedQueue<ProductOffering> offerings = vfPortfolio.offeredProductsMaster
 
 /**
- * setup productAttributesAndAssignment product
+ * setup offeringAttributesAndAssignment for offering
  */
 
 //setup a mandatory MPS core offeringAttributeGroup
@@ -30,28 +35,28 @@ OfferingAttributeGroup mpsAttGroup = new OfferingAttributeGroup (groupName:"MPS 
 //set up some attributes for group
 
 def stdComAttList = []
-CommercialProductAttribute cAttrib = new CommercialProductAttribute (dataType: String, name:"serviceTariff", displayName: "Service Tariff", partOfAttributeGroups:mpsAttGroup)
+CommercialProductAttribute cAttrib = new CommercialProductAttribute (dataType: String, name:"serviceTariff", displayName: "Service Tariff")
 mpsAttGroup.add (cAttrib); stdComAttList << cAttrib
 
-cAttrib = new CommercialProductAttribute (dataType: String, name:"term", displayName: "Contract Length", partOfAttributeGroups:mpsAttGroup)
+cAttrib = new CommercialProductAttribute (dataType: String, name:"term", displayName: "Contract Length")
 mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
 
-cAttrib = new CommercialProductAttribute (dataType: String, name:"penalty", displayName: "Penalty", partOfAttributeGroups:mpsAttGroup)
+cAttrib = new CommercialProductAttribute (dataType: String, name:"penalty", displayName: "Penalty")
 mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
 
-cAttrib = new CommercialProductAttribute (dataType: String, name:"voiceMinutes", displayName: "Voice", partOfAttributeGroups:mpsAttGroup)
+cAttrib = new CommercialProductAttribute (dataType: String, name:"voiceMinutes", displayName: "Voice")
 mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
 
-cAttrib = new CommercialProductAttribute (dataType: String, name:"texts", displayName: "Text", partOfAttributeGroups:mpsAttGroup)
+cAttrib = new CommercialProductAttribute (dataType: String, name:"texts", displayName: "Text")
 mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
 
-cAttrib = new CommercialProductAttribute (dataType: String, name:"dataInMb", displayName: "Data", partOfAttributeGroups:mpsAttGroup)
+cAttrib = new CommercialProductAttribute (dataType: String, name:"dataInMb", displayName: "Data")
 mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
 
-cAttrib = new CommercialProductAttribute (dataType: String, name:"wifi", displayName: "Wifi", partOfAttributeGroups:mpsAttGroup)
+cAttrib = new CommercialProductAttribute (dataType: String, name:"wifi", displayName: "Wifi")
 mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
 
-cAttrib = new CommercialProductAttribute (dataType: String, name:"4g", displayName: "4G", partOfAttributeGroups:mpsAttGroup)
+cAttrib = new CommercialProductAttribute (dataType: String, name:"4g", displayName: "4G")
 mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
 
 /*
@@ -123,12 +128,20 @@ globalDataCapLov << new AttributeValueListItem (sequenceNumber:seqNum++, value:"
 
 
 //now assign the things to offer mapping
-vfPortfolio.offeringAttributeMappings = new ConcurrentLinkedQueue<OfferingAttributeAssignment>()
+//vfPortfolio.offeringAttributeMappings = new ConcurrentLinkedQueue<OfferingAttributeAssignment>()
+
+ConcurrentLinkedQueue<ProductOffering> offerings = vfPortfolio.offeredProductsMaster  //get ref from binding
+
+
+//create a new package offering
+def myPackage = new ProductOffering (name:'my first package', status:"draft", isPackage: true)
+offerings << myPackage
+
 
 OfferingAttributeAssignment oMapping = new OfferingAttributeAssignment()
-vfPortfolio.offeringProductAttributeMappings << oMapping
+
+myPackage.setOfferingAttributeAssignment(oMapping)   //save mapping into offering
+
 
 oMapping.addAttributeGroup(mpsAttGroup) //add mandatory mps attribute group
 
-ProductOffering offer = new ProductOffering ()
-offer.offeringAttributeAssignment = oMapping  //self reference mapping directly on offering to off att assignment  for convenience

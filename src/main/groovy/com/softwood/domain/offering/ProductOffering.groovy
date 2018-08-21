@@ -12,8 +12,9 @@ import java.util.concurrent.ConcurrentLinkedQueue
 @MapConstructor (post = {id = SequenceGenerator.standard.next() } )
 class ProductOffering {
 
+    long id
     @Delegate Product productOnOffer    //use if offering is for one product
-    String packageName      // only set if has productOffering Bundles
+    String name
     BusinessUnitOrDivision offeringOrgUnit
     SalesChannel sellingChannel
     Region offerRegion
@@ -21,11 +22,16 @@ class ProductOffering {
     LocalDate toDate
     String status
     Boolean isDiscountable
-    Boolean isPackage   //set true if package, along with packageName
+    Boolean isPackage   //set true if package
     Version version
 
-    ConcurrentLinkedQueue<ProductOfferingBundle> offerBundle
+    ConcurrentLinkedQueue<ProductOfferingBundle> offerBundle = new ConcurrentLinkedQueue<>()
     OfferingAttributeAssignment offeringAttributeAssignment
+
+    void setOfferingAttributes (OfferingAttributeAssignment offeringAttributesMap) {
+        offeringAttributeAssignment = offeringAttributesMap
+        offeringAttributesMap.setProductOffering(this)
+    }
 
     void setOfferedProduct (Product product) {
         productOnOffer = product
@@ -49,5 +55,9 @@ class ProductOffering {
 
     Boolean isPackage () {
         isPackage
+    }
+
+    String toString() {
+        "Offering ($name ${status? ', status: '+status+', ':''} ${productOnOffer? ', forProduct : '+ productOnOffer + ', ':''} package:$isPackage) "
     }
 }
