@@ -28,27 +28,28 @@ class OfferingAttributeAssignment {
         productAttributesTuple.each {attributeNames << it.first.name << "\n"}
     }*/
 
-    void addCommercialAttribute (CommercialProductAttribute cpa, LoV=null) {
-        if (cpa.hasLoV && LoV == null)
-            throw MissingParameterException.newInstance("missing LoV attribute ")
+    void addCommercialAttribute (CommercialProductAttribute cpa, namedLoV=null) {
+        if (cpa.hasLoV && namedLoV == null)
+            throw MissingParameterException.newInstance("missing named LoV attribute ")
 
-        commercialAttributeTuplesList <<  new Tuple2(cpa, LoV)
+        commercialAttributeTuplesList <<  new Tuple2(cpa, namedLoV)
 
     }
 
-    void addProductAttribute2Group (OfferingAttributeGroup oag, CommercialProductAttribute cpa, LoV=null) {
-        if (cpa?.hasLoV && LoV == null)
-            throw MissingParameterException.newInstance("missing LoV attribute ")
+    void addProductAttribute2Group (OfferingAttributeGroup oag, CommercialProductAttribute cpa, namedLoV=null) {
+        if (cpa?.hasLoV && namedLoV == null)
+            throw MissingParameterException.newInstance("missing named LoV attribute ")
 
-        //find any matching groups in assignment
-        def oagMatches = offeringAttributeGroupsList.findAll {it == oag }
-        for (OfferingAttributeGroup group in oagMatches) {
-            def cpaMatches = group.groupAttributes.findAll (it.first == cpa)      //if pa matched on first tuple item
+        //find any matching group in assignment list
+        OfferingAttributeGroup oagMatch = offeringAttributeGroupsList.find {it == oag }
+        if (oagMatch) {
+            Tuple2[] cpaMatches = oagMatch.groupAttributes.findAll {it.first == cpa}      //if cpa matched on first tuple item
             for (cpaItem in cpaMatches) {
-                offeringAttributeGroupsList.remove(paItem)
+                oagMatch.removeCommercialAttribute(cpaItem.first)
             }
+            //add new tuple back into group commercuial attributes
+            oagMatch.addCommercialAttribute(cpa, namedLoV)
         }
-        commercialAttributeTuplesList <<  new Tuple2(pa, LoV)
 
     }
 
@@ -69,14 +70,17 @@ class OfferingAttributeAssignment {
             buff
         }.join("\n")
 
-        def groupAtts = offeringAttributeGroupsList.collect {"Offering Attribute Group: " + it.groupName + ">\n" +
-                it.offeringGroupAttributesList.collect{
+        def groupAtts
+        def gAttDetails = offeringAttributeGroupsList.collect {group -> "Offering Attribute Group: " + group.groupName + ">\n" +
+                 group.commercialGroupAttributesList.collect{tuple ->
                     StringBuffer buff = new StringBuffer ()
-                    buff << "\t" << it.first.name << " : " << it.first.dataType.name
-                    if (it.first.hasLoV)
-                        buff << ", with " <<  it?.second?.toString()
-                    buff
-                }.join("\n") }.join()
+                    buff << "\t" << tuple.first.name << " : " << tuple.first.dataType.name
+                    if (tuple.first.hasLoV)
+                        buff << ", with " <<  tuple?.second?.toString()
+                    buff.toString()
+                }.join("\n")
+        }
+        groupAtts = gAttDetails.join ("\n")     //join each group att description in returned collection of Strings
         String attListing = "${singleAtts }${groupAtts}"
     }
 }

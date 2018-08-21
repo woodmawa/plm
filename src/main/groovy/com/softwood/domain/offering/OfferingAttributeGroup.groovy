@@ -1,9 +1,7 @@
 package com.softwood.domain.offering
 
-import com.softwood.domain.portfolio.AttributeGroup
-import com.softwood.domain.portfolio.ProductAttribute
+import com.softwood.domain.portfolio.NamedListOfValues
 import com.softwood.utilities.SequenceGenerator
-import groovy.transform.InheritConstructors
 import groovy.transform.MapConstructor
 
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -15,22 +13,23 @@ class OfferingAttributeGroup /*extends AttributeGroup*/ {
 
         long id
         String groupName
-        ConcurrentLinkedQueue<Tuple2> offeringGroupAttributesList = new ConcurrentLinkedQueue<ProductAttribute>()
+        ConcurrentLinkedQueue<Tuple2> commercialGroupAttributesList = new ConcurrentLinkedQueue<Tuple2>()
         Boolean mandatory
 
-        void add (CommercialProductAttribute cpa, LoV = null) {
+        void addCommercialAttribute (CommercialProductAttribute cpa, LoV = null) {
             cpa?.addOfferingGroup(this)
-            offeringGroupAttributesList << new Tuple2 (cpa, LoV)
+            commercialGroupAttributesList << new Tuple2 (cpa, LoV)
         }
 
-        void remove (CommercialProductAttribute cpa) {
-            cpa?.removeofferingGroup(this)
+        void removeCommercialAttribute (CommercialProductAttribute cpa) {
+            cpa?.removeOfferingGroup(this)
             //check through all the tuples for matched productAttribute - if found remove
-            offeringGroupAttributesList.removeAll {it.first == cpa}
+            commercialGroupAttributesList.removeAll {it.first == cpa}
         }
 
-        def getGroupAttributes () {
-            offeringGroupAttributesList.toArray()
+
+        Tuple2<CommercialProductAttribute, NamedListOfValues>[] getGroupAttributes () {
+            commercialGroupAttributesList.toArray(Tuple2[])
         }
 
         Boolean isMandatroy () {

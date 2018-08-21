@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentLinkedQueue
 // sets the required value in the binding.  Multiple non dependant scripts can run at same level
 def runConfigInOrder = 2
 
-def products = vfPortfolio.productMaster
-Product iPhone = vfPortfolio.productMaster.list().find {it.name == "iPhone"}
+def products = vfPortfolio.productsMaster
+Product iPhone = vfPortfolio.productsMaster.list().find {it.name == "iPhone"}
 assert iPhone
 
 /**
@@ -32,13 +32,13 @@ AttributeGroup attGroup = new AttributeGroup (groupName:"Dimensions")
 
 def gattList = []
 ProductAttribute pAttrib = new ProductAttribute (dataType: String, name:"width")
-attGroup.add (pAttrib); gattList << pAttrib
+attGroup.addProductAttribute (pAttrib); gattList << pAttrib
 
 pAttrib = new ProductAttribute (dataType: String, name:"depth")
-attGroup.add (pAttrib);gattList << pAttrib
+attGroup.addProductAttribute (pAttrib);gattList << pAttrib
 
 pAttrib = new ProductAttribute (dataType: String, name:"height")
-attGroup.add (pAttrib); gattList << pAttrib
+attGroup.addProductAttribute (pAttrib); gattList << pAttrib
 
 //set up shape lov for one of attributes in dimensions group
 NamedListOfValues shapeLov = new NamedListOfValues(lovName:"shape")
@@ -47,7 +47,7 @@ shapeLov << new AttributeValueListItem (sequenceNumber:2, value:"rectangle", isD
 
 pAttrib = new ProductAttribute (dataType: String, name:"shape", hasLoV:true)
 //add using optional named lov instance
-attGroup.add (pAttrib, shapeLov); gattList << pAttrib
+attGroup.addProductAttribute (pAttrib, shapeLov); gattList << pAttrib
 
 
 //set up some standalone attributes
@@ -65,6 +65,7 @@ colourLov << new AttributeValueListItem (sequenceNumber:2, value:"blue")
 colourLov << new AttributeValueListItem (sequenceNumber:3, value:"gold", isDefaultValue:true)
 colourLov << new AttributeValueListItem (sequenceNumber:4, value:"silver", owningNamedLov: colourLov)
 
+//setup an singleton attribute which has an assoc lov
 def singletonAttList = []
 pAttrib = new ProductAttribute (dataType: String, name:"weight", hasLoV:false)
 singletonAttList << pAttrib

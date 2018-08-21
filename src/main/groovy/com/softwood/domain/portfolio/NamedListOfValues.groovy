@@ -23,6 +23,13 @@ class NamedListOfValues {
         add(avli)
     }
 
+    /*
+     * get sorted list of attribute values in logical sequence order
+     */
+    AttributeValueListItem[] getListOfValues () {
+        listOfValues.toArray(AttributeValueListItem[]).sort {it.sequenceNumber}
+    }
+
     String toString () {
         def values = listOfValues.collect {"(${it.sequenceNumber})$it.value ${it.isDefaultValue ? "[default:"+it.isDefaultValue+ "]": ""}"  } .join(",")
         """LoV: $values"""

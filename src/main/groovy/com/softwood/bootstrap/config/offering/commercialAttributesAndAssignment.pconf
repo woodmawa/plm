@@ -21,43 +21,14 @@ Binding scriptBinding = getBinding()
 def p = scriptBinding.vfPortfolio
 println "vfPortfolio is of class : " + p.getClass()
 
-//vfPortolfio is an expando
+//vfPortolfio is an expando, add offeredProductsMaster as new head
 vfPortfolio.offeredProductsMaster = new ConcurrentLinkedQueue<ProductOffering>()
+vfPortfolio.offeredProductsMaster.metaClass.list = {delegate.toArray(ProductOffering[]) }
+
 
 /**
  * setup offeringAttributesAndAssignment for offering
  */
-
-//setup a mandatory MPS core offeringAttributeGroup
-
-OfferingAttributeGroup mpsAttGroup = new OfferingAttributeGroup (groupName:"MPS Package attributes", mandatory:true)
-
-//set up some attributes for group
-
-def stdComAttList = []
-CommercialProductAttribute cAttrib = new CommercialProductAttribute (dataType: String, name:"serviceTariff", displayName: "Service Tariff")
-mpsAttGroup.add (cAttrib); stdComAttList << cAttrib
-
-cAttrib = new CommercialProductAttribute (dataType: String, name:"term", displayName: "Contract Length")
-mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
-
-cAttrib = new CommercialProductAttribute (dataType: String, name:"penalty", displayName: "Penalty")
-mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
-
-cAttrib = new CommercialProductAttribute (dataType: String, name:"voiceMinutes", displayName: "Voice")
-mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
-
-cAttrib = new CommercialProductAttribute (dataType: String, name:"texts", displayName: "Text")
-mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
-
-cAttrib = new CommercialProductAttribute (dataType: String, name:"dataInMb", displayName: "Data")
-mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
-
-cAttrib = new CommercialProductAttribute (dataType: String, name:"wifi", displayName: "Wifi")
-mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
-
-cAttrib = new CommercialProductAttribute (dataType: String, name:"4g", displayName: "4G")
-mpsAttGroup.add (cAttrib);stdComAttList << cAttrib
 
 /*
  *set up voice minutes LoV for one of attributes in MPS group
@@ -110,6 +81,30 @@ wifiMBLov << new AttributeValueListItem (sequenceNumber:seqNum++, value:"$it")
 dataMBLov << new AttributeValueListItem (sequenceNumber:seqNum++, value:"No")
 dataMBLov << new AttributeValueListItem (sequenceNumber:seqNum++, value:"Unlimited")
 
+
+/*
+ *  set up service tariffs LoV
+ */
+NamedListOfValues serviceTariffLoV = new NamedListOfValues(lovName:"serviceTariff")
+def servTar = ["Business Sharer tariff", "Company Caller Tariff", "Occasional UsePay Monthly Tariff", "One Net Business PPM Tariff",
+               "Once Net Business Tariff", "Pay Monthly CTR11 Red Tariff",  "Pay Monthly CTR12 Tariff", "Pay Monthly CTR13 Tariff",
+                "Pay Monthly Tariff", "Simple Tariff Plan"]
+seqNum = 1
+servTar.each {
+    serviceTariffLoV << new AttributeValueListItem (sequenceNumber:seqNum++, value:"$it")
+}
+
+
+/*
+ *  set up contract term LoV
+ */
+NamedListOfValues contractTermLoV = new NamedListOfValues(lovName:"contractTerm")
+def contractTerms = [0,1,3,6,12,18,24,36]
+seqNum = 1
+contractTerms.each {
+    contractTermLoV << new AttributeValueListItem (sequenceNumber:seqNum++, value:"$it")
+}
+
 /*
  *set up data cap LoVs for one of attributes in MPS group
  */
@@ -126,6 +121,40 @@ euDataCapLov << new AttributeValueListItem (sequenceNumber:seqNum++, value:"$it"
 globalDataCapLov << new AttributeValueListItem (sequenceNumber:seqNum++, value:"$it")
 }
 
+//now setup 2 groups, 'general package info' and 'MPS core' offeringAttributeGroups
+
+OfferingAttributeGroup generalPackageInfoGroup = new OfferingAttributeGroup (groupName:"General Package attributes", mandatory:true)
+OfferingAttributeGroup mpsAttGroup = new OfferingAttributeGroup (groupName:"MPS Core attributes", mandatory:true)
+
+//set up some attributes for package info  group
+
+CommercialProductAttribute cServTar = new CommercialProductAttribute (dataType: String, name:"serviceTariff", displayName: "Service Tariff", hasLoV:true )
+generalPackageInfoGroup.addCommercialAttribute (cServTar, serviceTariffLoV)
+
+def cTerm = new CommercialProductAttribute (dataType: String, name:"contractTerm", displayName: "Contract Length", hasLoV:true)
+//generalPackageInfoGroup.addCommercialAttribute (cTerm, contractTermLoV) - do this below via assignment
+
+//should be calculated amount really
+def cPenalty = new CommercialProductAttribute (dataType: String, name:"penalty", displayName: "Penalty", hasLoV:false)
+generalPackageInfoGroup.addCommercialAttribute (cPenalty)
+
+//set up some attributes for MPS group
+
+cAttrib = new CommercialProductAttribute (dataType: String, name:"voiceMinutes", displayName: "Voice", hasLoV:true)
+mpsAttGroup.addCommercialAttribute (cAttrib, voiceMinutesLov)
+
+cAttrib = new CommercialProductAttribute (dataType: String, name:"texts", displayName: "Text", hasLoV:true)
+mpsAttGroup.addCommercialAttribute (cAttrib, textMinutesLov)
+
+cAttrib = new CommercialProductAttribute (dataType: String, name:"dataInMb", displayName: "Data", hasLoV:true)
+mpsAttGroup.addCommercialAttribute (cAttrib, dataMBLov)
+
+cAttrib = new CommercialProductAttribute (dataType: String, name:"wifi", displayName: "Wifi", hasLoV:true)
+mpsAttGroup.addCommercialAttribute (cAttrib, wifiMBLov)
+
+cAttrib = new CommercialProductAttribute (dataType: String, name:"4g", displayName: "4G", hasLoV:true)
+mpsAttGroup.addCommercialAttribute (cAttrib)
+
 
 //now assign the things to offer mapping
 //vfPortfolio.offeringAttributeMappings = new ConcurrentLinkedQueue<OfferingAttributeAssignment>()
@@ -133,15 +162,37 @@ globalDataCapLov << new AttributeValueListItem (sequenceNumber:seqNum++, value:"
 ConcurrentLinkedQueue<ProductOffering> offerings = vfPortfolio.offeredProductsMaster  //get ref from binding
 
 
-//create a new package offering
+//create a new package offering - 1st offer
 def myPackage = new ProductOffering (name:'my first package', status:"draft", isPackage: true)
 offerings << myPackage
 
+//add mps package offering - 2nd offer
+def mpsPackage = new ProductOffering (name:'Indirect Only - Matched SIM Package', status:"launched", isPackage: true)
+offerings << mpsPackage
 
 OfferingAttributeAssignment oMapping = new OfferingAttributeAssignment()
+OfferingAttributeAssignment mpsMapping = new OfferingAttributeAssignment()
 
 myPackage.setOfferingAttributeAssignment(oMapping)   //save mapping into offering
-
+mpsPackage.setOfferingAttributes(mpsMapping)
 
 oMapping.addAttributeGroup(mpsAttGroup) //add mandatory mps attribute group
+
+mpsMapping.addAttributeGroup(generalPackageInfoGroup)
+mpsMapping.addAttributeGroup(mpsAttGroup)
+assert mpsPackage.offeringAttributeAssignment.offeringAttributeGroupsList.size() == 2
+
+mpsMapping.addProductAttribute2Group(generalPackageInfoGroup, cServTar, serviceTariffLoV)
+mpsMapping.addProductAttribute2Group(generalPackageInfoGroup, cTerm, contractTermLoV)
+mpsMapping.addProductAttribute2Group(generalPackageInfoGroup, cPenalty)
+
+def iPhone = vfPortfolio.productsMaster.find {product -> product.name == 'iPhone'}
+assert iPhone
+
+//third offer
+ProductOffering iPhoneOffering = new ProductOffering (name:'iPhone')
+iPhoneOffering.setProductOnOffer(iPhone)
+offerings << iPhoneOffering
+
+println "done comm offerings "
 

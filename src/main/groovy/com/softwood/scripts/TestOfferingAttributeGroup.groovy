@@ -25,6 +25,9 @@ class B extends A {
    }
 }
 
+def cAttList = ["hello", "world"]
+def res = cAttList.join ""
+
 def myA = new A(name:"will")
 println myA
 

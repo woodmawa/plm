@@ -41,7 +41,7 @@ class CommercialProductAttribute /*extends ProductAttribute */ {
     }
 
     String toString () {
-        "${this.toClass().simpleName} ($name, display:$displayName, type:$dataType, LoV:$hasLoV "
+        "CommercialProductAttribute ($name, display:$displayName, type:$dataType, LoV:$hasLoV) "
     }
 
 
