@@ -13,9 +13,10 @@ class ProductOfferingPrice {
     Boolean isTaxable
     PromotionOfferring promotion        // only set if this price is for specificied promotion
     ProductOffering productOffering     // which offering this price is attached to
+    boolean isDynamicPrice = false
 
-    Money RLVprice
-    Money PromotionRLVprice
+    Money rlvPrice
+    Money promotionRlvPrice
     long version
 
     Boolean isPromotionPrice ( ){
@@ -32,6 +33,21 @@ class ProductOfferingPrice {
         promotionPriceCalculator = dynamicCalculator
     }
 
+    Money getPrice (def externalFactors = null) {
+        def price
+        if (isDynamicPrice )
+            price = calculate (externalFactors)
+        else {
+            if (isPromotionPrice())
+                price = rlvPrice
+            else
+                price = promotionRlvPrice
+        }
+
+        (price != null) ? price :  new Money(valid:false, amount:0)
+    }
+
+    //set the calcuator delegate to ref this price instance
     Money calculate (def externalFactors) {
         Closure calcToUse  = isPromotionPrice() ? promotionPriceCalculator.clone() : priceCalculator.clone()
         calcToUse.delegate = this
