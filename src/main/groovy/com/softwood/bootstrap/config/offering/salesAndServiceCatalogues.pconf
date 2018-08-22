@@ -2,12 +2,14 @@ package com.softwood.bootstrap.config.offering
 
 import com.softwood.domain.offering.OfferingAttributeGroup
 import com.softwood.domain.offering.SalesCatalogue
+import com.softwood.domain.offering.SalesChannel
 import com.softwood.domain.portfolio.AttributeValueListItem
 import com.softwood.domain.portfolio.NamedListOfValues
 import com.softwood.domain.offering.ProductOffering
 import com.softwood.domain.offering.CommercialProductAttribute
 import com.softwood.domain.offering.OfferingAttributeAssignment
 import com.softwood.domain.portfolio.ProductClass
+import com.softwood.domain.portfolio.Region
 
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -15,14 +17,14 @@ import java.util.concurrent.ConcurrentLinkedQueue
 // any globally required value should be set to the binding
 // ensure that any dependant scripts run with higher order value than the script that
 // sets the required value in the binding.  Multiple non dependant scripts can run at same level
-def runConfigInOrder = 3
+def runConfigInOrder = 4
 
 Binding scriptBinding = getBinding()
 
 
 //vfPortolfio is an expando, add offeredProductsMaster as new head
-vfPortfolio.offeredProductsMaster = new ConcurrentLinkedQueue<ProductOffering>()
-vfPortfolio.offeredProductsMaster.metaClass.list = {delegate.toArray(ProductOffering[]) }
+vfPortfolio.OfferedProductsMaster = new ConcurrentLinkedQueue<ProductOffering>()
+vfPortfolio.OfferedProductsMaster.metaClass.list = {delegate.toArray(ProductOffering[]) }
 
 vfPortfolio.salesCataloguesMaster = new ConcurrentLinkedQueue<ProductOffering>()
 vfPortfolio.salesCataloguesMaster.metaClass.list = {delegate.toArray(SalesCatalogue[]) }
@@ -45,10 +47,10 @@ def fixServiciceLineRental
 root_fixedService.addChild(fixServiciceLineRental = new SalesCatalogue (name:"Fixed Line Rental Bundles", level:2))
 
 def fixTariffPlan
-root_fixedService.addChild(fixTariffPlan = new SalesCatalogue (name:"Fixed Line Rental Bundles", level:2))
+root_fixedService.addChild(fixTariffPlan = new SalesCatalogue (name:"Fixed Tariff Plan", level:2))
 
 def ipPhone
-root_fixedService.addChild(ipPhone = new SalesCatalogue (name:"Fixed Line Rental Bundles", level:2))
+root_fixedService.addChild(ipPhone = new SalesCatalogue (name:"IP Phones", level:2))
 def conPhoneLine
 ipPhone.addChild(conPhoneLine = new SalesCatalogue (name:"Fixed Contract Phone Line", level:3))
 def ip6000
@@ -79,8 +81,9 @@ root_mobBBservice.addChild(_4GPayg = new SalesCatalogue (name:"4G PAYG", level:2
 def dataRateLimitRed
 _4GPayg.addChild(dataRateLimitRed = new SalesCatalogue (name:"4G Service", level:3))
 
-
-
+def ukRetailChan = vfPortfolio.salesChannels.find {it.name == "UK Retail"}
+assert ukRetailChan
+root_mobBBservice.setSalesChannel(ukRetailChan)
 
 vfPortfolio.salesCataloguesMaster << root_fixedService
 vfPortfolio.salesCataloguesMaster << root_mobBBservice

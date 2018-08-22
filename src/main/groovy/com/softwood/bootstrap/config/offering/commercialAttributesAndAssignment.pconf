@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 // any globally required value should be set to the binding
 // ensure that any dependant scripts run with higher order value than the script that
 // sets the required value in the binding.  Multiple non dependant scripts can run at same level
-def runConfigInOrder = 2
+def runConfigInOrder = 3
 
 Binding scriptBinding = getBinding()
 
@@ -138,7 +138,7 @@ generalPackageInfoGroup.addCommercialAttribute (cPenalty)
 
 //set up some attributes for MPS group
 
-cAttrib = new CommercialProductAttribute (dataType: String, name:"voiceMinutes", displayName: "Voice", hasLoV:true)
+CommercialProductAttribute cAttrib = new CommercialProductAttribute (dataType: String, name:"voiceMinutes", displayName: "Voice", hasLoV:true)
 mpsAttGroup.addCommercialAttribute (cAttrib, voiceMinutesLov)
 
 cAttrib = new CommercialProductAttribute (dataType: String, name:"texts", displayName: "Text", hasLoV:true)
@@ -190,7 +190,14 @@ assert iPhone
 //third offer
 ProductOffering iPhoneOffering = new ProductOffering (name:'iPhone')
 iPhoneOffering.setProductOnOffer(iPhone)
+
+def ukRetail = vfPortfolio.salesChannels.find {it.name == "UK Retail"}
+assert ukRetail
+iPhoneOffering.setSalesChannel(ukRetail)
 offerings << iPhoneOffering
+
+assert vfPortfolio.offeredProductsMaster.size () > 0
+
 
 
 

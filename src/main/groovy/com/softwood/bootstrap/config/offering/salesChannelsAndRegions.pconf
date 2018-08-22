@@ -1,0 +1,53 @@
+package com.softwood.bootstrap.config.offering
+
+import com.softwood.domain.offering.OfferingAttributeGroup
+import com.softwood.domain.offering.SalesCatalogue
+import com.softwood.domain.offering.SalesChannel
+import com.softwood.domain.portfolio.AttributeValueListItem
+import com.softwood.domain.portfolio.NamedListOfValues
+import com.softwood.domain.offering.ProductOffering
+import com.softwood.domain.offering.CommercialProductAttribute
+import com.softwood.domain.offering.OfferingAttributeAssignment
+import com.softwood.domain.portfolio.ProductClass
+import com.softwood.domain.portfolio.Region
+
+import java.util.concurrent.ConcurrentLinkedQueue
+
+// set this value to determine the order that config files will be run
+// any globally required value should be set to the binding
+// ensure that any dependant scripts run with higher order value than the script that
+// sets the required value in the binding.  Multiple non dependant scripts can run at same level
+def runConfigInOrder = 2
+
+Binding scriptBinding = getBinding()
+
+
+vfPortfolio.salesChannels = new ConcurrentLinkedQueue<SalesChannel>()
+vfPortfolio.salesChannels.metaClass.list = {delegate.toArray(SalesChannel[]) }
+
+vfPortfolio.regions = new ConcurrentLinkedQueue<Region>()
+vfPortfolio.regions.metaClass.list = {delegate.toArray(Region[]) }
+
+
+/**
+ * setup some sales channels and regions
+ */
+
+Region ukRegion = new Region (name:"UK National")
+ukRegion.addCountry("GB") ;Region.regionList << ukRegion    // add specific country for this region
+Region emeaRegion = new Region (name:"EMEA"); Region.regionList << emeaRegion
+Region apacRegion = new Region (name:"APAC"); Region.regionList << emeaRegion
+
+
+vfPortfolio.regions << ukRegion
+vfPortfolio.regions << emeaRegion
+vfPortfolio.regions << apacRegion
+
+SalesChannel allChannels = new SalesChannel (name:"All Channels")
+SalesChannel ukIndirectsChan = new SalesChannel (name:"UK Indirect Channels")
+SalesChannel ukRetailChan = new SalesChannel (name:"UK Retail")
+
+vfPortfolio.salesChannels << allChannels
+vfPortfolio.salesChannels << ukIndirectsChan
+vfPortfolio.salesChannels << ukRetailChan
+

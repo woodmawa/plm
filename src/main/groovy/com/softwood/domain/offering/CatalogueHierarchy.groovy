@@ -28,7 +28,7 @@ abstract class CatalogueHierarchy {
             child.setParent (this)
 
     }
-
+    
     String getCrumbPath () {
         List crumbs = new ArrayList()
         if (parent)
@@ -70,7 +70,11 @@ abstract class CatalogueHierarchy {
 //two concrete catalogues one for sales and one for service
 @InheritConstructors
 class SalesCatalogue extends CatalogueHierarchy {
+    SalesChannel sellingChannel
 
+    void setSalesChannel (SalesChannel salesChannel) {
+        sellingChannel = salesChannel
+    }
 }
 
 //@MapConstructor (post = {id = SequenceGenerator.standard.next() })

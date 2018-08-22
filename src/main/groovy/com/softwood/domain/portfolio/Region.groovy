@@ -21,6 +21,7 @@ class Region {
         regionList << worldwide
     }
 
+
     void addCountry (String iso2code) {
 
         def country = Country.countries.find {it.iso2code == iso2code}
@@ -35,6 +36,7 @@ class Region {
     }
 
     String toString() {
-        "region ($name, specified countries:$regionCountries)"
+        def specifiedCountries = regionCountries ? ", specified countries:$regionCountries" : ''
+        "Region ($name $specifiedCountries) }"
     }
 }
