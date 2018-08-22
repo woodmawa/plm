@@ -1,6 +1,7 @@
 package com.softwood.domain.offering
 
 import com.softwood.domain.portfolio.AttributeGroup
+import com.softwood.domain.portfolio.BusinessPhase
 import com.softwood.domain.portfolio.ProductAttribute
 import com.softwood.utilities.SequenceGenerator
 import com.softwood.utilities.Version
@@ -25,6 +26,8 @@ class CommercialProductAttribute /*extends ProductAttribute */ {
     boolean isVisible
     boolean isMandatory
     boolean isReadOnly
+    BusinessPhase mustCompleteByPhase
+
     Version version
 
 
@@ -39,6 +42,11 @@ class CommercialProductAttribute /*extends ProductAttribute */ {
     void removeOfferingGroup (offeringGroup) {
         partOfofferingAttributeGroups.remove(offeringGroup)
     }
+
+    void setPhaseCompletion (BusinessPhase mustCaptureDuring) {
+        mustCompleteByPhase = mustCaptureDuring
+    }
+
 
     String toString () {
         "CommercialProductAttribute ($name, display:$displayName, type:$dataType, LoV:$hasLoV) "
