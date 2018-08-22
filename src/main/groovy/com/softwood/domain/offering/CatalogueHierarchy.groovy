@@ -28,7 +28,7 @@ abstract class CatalogueHierarchy {
             child.setParent (this)
 
     }
-    
+
     String getCrumbPath () {
         List crumbs = new ArrayList()
         if (parent)
