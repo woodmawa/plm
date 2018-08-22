@@ -1,6 +1,6 @@
 package com.softwood.domain.portfolio
 
-
+import java.time.LocalDate
 import java.util.concurrent.ConcurrentHashMap
 
 class ProductRelationship {
@@ -10,6 +10,8 @@ class ProductRelationship {
     Range  zEndCardinality  = [0..1]  //set default to be expected in range [0..1] - can occur upto
     ConcurrentHashMap aEndRelationship = new ConcurrentHashMap()
     ConcurrentHashMap zEndRelationship = new ConcurrentHashMap()
+    LocalDate validFromDate
+    LocalDate validToDate
     long version
 
     //referencedBy (owning end)
@@ -20,9 +22,9 @@ class ProductRelationship {
     }
 
     //references (others)
-    void addRelationshipTo (Product p, zEndRole=null) {
+    void addRelationshipTo (def object, zEndRole=null) {
         assert p
-        zEndRelationship << [product:p, role:zEndRole]
+        zEndRelationship << [linkTo:p, role:zEndRole]
     }
 
     // used for validation checks to ensure in a BoM that the ProductInstance relationships fit with the range
