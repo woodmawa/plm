@@ -23,6 +23,7 @@ class ProductAttribute {
     boolean isVisible = true
     boolean isMandatory
     boolean isReadOnly
+    BusinessPhase mustCompleteByPhase
     Version version
 
 
@@ -38,7 +39,15 @@ class ProductAttribute {
         partOfAttributeGroups.remove(attributeGroup)
     }
 
+    void setPhaseCompletion (BusinessPhase mustCaptureDuring) {
+        mustCompleteByPhase = mustCaptureDuring
+    }
+
     String toString () {
         "${this.toClass().simpleName} ($name, display:$displayName, type:$dataType, LoV:$hasLoV "
     }
+}
+
+enum BusinessPhase {
+    SALES, BUILD, ACTIVATION, BILLING, ASSURANCE
 }
