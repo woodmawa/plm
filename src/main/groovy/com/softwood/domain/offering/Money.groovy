@@ -23,6 +23,7 @@ class InvalidCurrencyException extends RuntimeException {
 @Immutable
 @TupleConstructor
 class Money {
+    boolean valid = true
     BigDecimal amount
     CurrencyType currency
     Closure ConversionRateCalculator  = new CurrencyCalculator().convert
