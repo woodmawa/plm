@@ -54,7 +54,7 @@ class Product {
 
     ArrayList getAttributesSummary () {
 
-        
+
     }
 
     String toString() {
