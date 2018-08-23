@@ -1,6 +1,6 @@
 package com.softwood.bootstrap.config
 
-import com.softwood.portfolio.ProductHierarchy
+import com.softwood.domain.portfolio.ProductHierarchy
 
 import java.util.concurrent.ConcurrentLinkedQueue
 

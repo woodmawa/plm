@@ -1,6 +1,7 @@
 package com.softwood.bootstrap
 
 import com.softwood.bootstrap.applicationHelper.*
+import com.softwood.domain.offering.ProductOffering
 
 @Singleton
 class Application {
@@ -23,12 +24,27 @@ class Application {
         appBinding.with {
             //println ">> ${vfPortfolio.productMaster}"
             println ">> ${vfPortfolio.productUses.list()} "
-            println ">> ${vfPortfolio.productMaster.list()} "
+            println ">> ${vfPortfolio.productsMaster.list()} "
             println ">> ${vfPortfolio.productHierarchies.list()} "
             println ">> ${vfPortfolio.productLines.list()} "
+            println ">> ${vfPortfolio.salesCataloguesMaster.list()} "
             def iPhoneMap = vfPortfolio.productAttributeMappings.find {it.product.name == "iPhone"}
             assert iPhoneMap
             println iPhoneMap.toString()
+
+            def offerings = vfPortfolio.offeredProductsMaster
+            assert vfPortfolio.offeredProductsMaster.size() > 1
+
+            ProductOffering myOffer = offerings[0]
+            println "\n myoffer : " + myOffer + ", with commercial attributes "
+            println myOffer.offeringAttributeAssignment
+
+            myOffer = offerings[1]
+            assert myOffer.offeringAttributeAssignment.offeringAttributeGroupsList.size() == 2
+            println "First mps package  offer : " + myOffer
+            println myOffer.offeringAttributeAssignment
+
+            println "iphone offer : " + offerings[2]
         }
 
 

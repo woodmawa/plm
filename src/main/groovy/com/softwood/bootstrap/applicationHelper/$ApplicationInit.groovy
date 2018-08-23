@@ -31,7 +31,7 @@ class $ApplicationInit {
 
             def bootstrap = new File("$bootstrapLocation/bootstrapConfig.groovy")
 
-            def cfn = bootstrap.canonicalPath
+            def configFileName = bootstrap.canonicalPath
 
             if (bootstrap.exists() && bootstrap.canExecute()) {
                 GroovyShell shell = new GroovyShell(appBinding)

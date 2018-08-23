@@ -1,4 +1,4 @@
-package com.softwood.portfolio
+package com.softwood.domain.portfolio
 
 import com.softwood.utilities.SequenceGenerator
 import groovy.transform.MapConstructor

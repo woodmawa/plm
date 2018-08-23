@@ -28,7 +28,7 @@ dir.eachFileRecurse (FileType.FILES) { file ->
     def runOrderText
     def runScriptOrder
     String line
-    if (ext =~ /^conf$/ ) {
+    if (ext =~ /^pconf$/ ) {
         def lines = file.readLines()
         def result = lines.findResult {
              /*Pattern pat = ~"""
@@ -42,8 +42,8 @@ dir.eachFileRecurse (FileType.FILES) { file ->
                     \\s+                # some whitespace
                     (d+)                # some digits in group to make productAttributesAndAssignment number
                      """*/
-            pat = ~/^\s*+def\s*runConfigInOrder\s*=\s*(\d+)/
-            def m = (it =~ pat)
+            def pattern = ~/^\s*+def\s*runConfigInOrder\s*=\s*(\d+)/
+            def m = (it =~ pattern)
             if (m.matches()) { it}
         }
 
@@ -65,6 +65,8 @@ def runInSequence = $runScriptOrder.sort {a,b ->
 //expact the conf files to add to vfPortfolio expando
 println " bootstrap : run configs in order "
 runInSequence.each {
+
+    println " --- running : ${it[1].name} [runOrder : ${it[0]}]..."
     evaluate(it[1])
 }
 

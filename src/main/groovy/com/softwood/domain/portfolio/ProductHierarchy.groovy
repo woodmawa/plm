@@ -1,8 +1,7 @@
-package com.softwood.portfolio
+package com.softwood.domain.portfolio
 
 
 import com.softwood.utilities.SequenceGenerator
-import groovy.transform.Canonical
 import groovy.transform.MapConstructor
 
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -62,6 +61,6 @@ class ProductHierarchy {
     }
 
     String toString () {
-        "Hierarchy (name:${getCrumbPath()}, level: $level"
+        "Hierarchy (name:${getCrumbPath()}, level: $level)"
     }
 }

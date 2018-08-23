@@ -1,8 +1,8 @@
 package com.softwood.bootstrap.config
 
-import com.softwood.portfolio.Product
-import com.softwood.portfolio.ProductClass
-import com.softwood.portfolio.*
+import com.softwood.domain.portfolio.Product
+import com.softwood.domain.portfolio.ProductClass
+import com.softwood.domain.portfolio.*
 
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -31,13 +31,13 @@ pclass = new ProductClass (productClass: "Network", productType: "MPLS")
 vfPortfolio.productClasses << pclass
 
 //setup productAttributesAndAssignment couple of basic products
-vfPortfolio.productMaster = new ConcurrentLinkedQueue()
-vfPortfolio.productMaster.metaClass.list = {delegate.toArray(Product[]) }
+vfPortfolio.productsMaster = new ConcurrentLinkedQueue()
+vfPortfolio.productsMaster.metaClass.list = {delegate.toArray(Product[]) }
 
 
 
 Product product = new Product (code: "123", name:"iPhone", SKU:"ph/123", productClass:phones)
-vfPortfolio.productMaster << product
+vfPortfolio.productsMaster << product
 
 product = new Product (code: "125", name:"Cisco ASR 1001-x", SKU:"productHierarchy-r/1001x", productClass:router)
-vfPortfolio.productMaster << product
+vfPortfolio.productsMaster << product
